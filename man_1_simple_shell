@@ -7,7 +7,7 @@
  .br 
  Then, it will wait for an input such as : command [arguments] [other] 
  .SH DESCRIPTION 
- This shell is a project on how to execute basic commands in the UNIX environment. My partner and I wrote tgese codes to behave like a real shell. A shell is a command language interpreter that executes commands read from the standard input or from a file. Our shell is still a wor-in-progress. We hope to make it run effectively to the extent that it will be able to support arguments assigned to it.
+ This shell is a project on how to execute basic commands in the UNIX shell environment. My partner and I wrote these codes to behave like a real shell. A shell is a command language interpreter that executes commands read from the standard input or from a file. Our shell is still a work-in-progress. We hope to make it run effectively to the extent that it will be able to support arguments assigned to it.
  .br 
  .B What hsh can do : 
  .br 
