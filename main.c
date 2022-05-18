@@ -1,40 +1,73 @@
-#include "main.h" 
-  
- /** 
-  * sig_handler - checks if Ctrl C is pressed 
-  * @sig_num: int 
-  */ 
- void sig_handler(int sig_num) 
- { 
-         if (sig_num == SIGINT) 
-         { 
-                 _puts("\n#cisfun$ "); 
-         } 
- } 
-  
- /** 
- * _EOF - handles the End of File 
- * @len: return value of getline function 
- * @buff: buffer 
-  */ 
- void _EOF(int len, char *buff) 
- { 
-         (void)buff; 
-         if (len == -1) 
-         { 
-                 if (isatty(STDIN_FILENO)) 
-                 { 
-                         _puts("\n"); 
-                         free(buff); 
-                 } 
-                 exit(0); 
-         } 
- } 
- /** 
-   * _isatty - verif if terminal 
-   */ 
-  
- void _isatty(void) 
- { 
-         if (isatty(STDIN_FILENO)) 
-                 _puts("#cisfun$ ");}
+#include "main.h"
+
+/**
+ * free_data - frees data structure
+ *
+ * @datash: data structure
+ * Return: no return
+ */
+void free_data(data_shell *datash)
+{
+	unsigned int i;
+
+	for (i = 0; datash->_environ[i]; i++)
+	{
+		free(datash->_environ[i]);
+	}
+
+	free(datash->_environ);
+	free(datash->pid);
+}
+
+/**
+ * set_data - Initialize data structure
+ *
+ * @datash: data structure
+ * @av: argument vector
+ * Return: no return
+ */
+void set_data(data_shell *datash, char **av)
+{
+	unsigned int i;
+
+	datash->av = av;
+	datash->input = NULL;
+	datash->args = NULL;
+	datash->status = 0;
+	datash->counter = 1;
+
+	for (i = 0; environ[i]; i++)
+		;
+
+	datash->_environ = malloc(sizeof(char *) * (i + 1));
+
+	for (i = 0; environ[i]; i++)
+	{
+		datash->_environ[i] = _strdup(environ[i]);
+	}
+
+	datash->_environ[i] = NULL;
+	datash->pid = aux_itoa(getpid());
+}
+
+/**
+ * main - Entry point
+ *
+ * @ac: argument count
+ * @av: argument vector
+ *
+ * Return: 0 on success.
+ */
+int main(int ac, char **av)
+{
+	data_shell datash;
+	(void) ac;
+
+	signal(SIGINT, get_sigint);
+	set_data(&datash, av);
+	shell_loop(&datash);
+	free_data(&datash);
+	if (datash.status < 0)
+		return (255);
+	return (datash.status);
+}
